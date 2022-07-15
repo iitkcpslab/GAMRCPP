@@ -1,0 +1,5 @@
+int16 total_robots
+int16 horizon_length
+PlanInstance[] plans
+---
+int16 next_horizon
