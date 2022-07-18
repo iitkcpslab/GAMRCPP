@@ -3,7 +3,7 @@ Implementation of **Scalable Online Coverage Path Planning for Multi-Robot Syste
 
 ###### Instructions:
 
-1.  Download the source code:<br/> 
+1.  Download the source code package:<br/> 
     `cd ~/catkin_ws/src/`<br/> 
     `git clone https://github.com/iitkcpslab/GAMRCPP.git`
 2.  Understand the directory structure:<br/> 
@@ -15,7 +15,7 @@ Implementation of **Scalable Online Coverage Path Planning for Multi-Robot Syste
          | 0.0        | Obstacle-occupied cell               |
          | 0.5        | Obstacle-free cell                   |
          | i (&ge; 1) | Initial location of **Robot-i**      |
-         
+
         *E.g.*, the given file represents a *4 x 3* grid with 2 robots - Robot-1 and Robot-2, having initial locations (0,0) and (3,2), respectively. 
     3.  msg: Contains message files. 
     4.  output: Contains the obtained results when run with the input. 
@@ -27,5 +27,7 @@ Implementation of **Scalable Online Coverage Path Planning for Multi-Robot Syste
         | ---------- | ------------------------------------ | ------------------ | ------------------ | ------------------- | ------------------ |
     5.  src: Contains the source files corresponding to the header files. 
         * Robot side: *robot.cpp* emulates a robot and *start_robots.cpp* starts as many robots as required in an experiment. 
-        * Coverage Planned side: The rest of the source files. 
+        * Coverage Planner side: The rest of the source files. 
     6.  srv: Contains the service files. 
+3.  Build the package:<br/> 
+    `cd ~/catkin_ws ; catkin_make clean && catkin_make && source ~/catkin_ws/devel/setup.bash`
