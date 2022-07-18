@@ -8,4 +8,4 @@ Implementation of **Scalable Online Coverage Path Planning for Multi-Robot Syste
     `git clone https://github.com/iitkcpslab/GAMRCPP.git`
 2.  Understand the directory structure:<br/> 
     1.  include: Contains the header files.<br/> 
-        *Note*: By default, the source code is configured for **GAMRCPP** with the motions of *Quadcopters in 2D workspace*. However, this can be changed in *debug.h* file. You may uncomment `#define TURTLEBOT` to configure the source code for **GAMRCPP** with the motions of *Turtlebots*. Similarly, you may uncomment `#define HOR_LEN_MAX` to configure the source code for **GAMRCPP<sub>MAX</sub>** instead of **GAMRCPP**. 
+        *Note*: By default, the source code is configured for **GAMRCPP** with the motions of a *Quadcopter in a 2D workspace*. However, this can be reconfigured in *debug.h* file. You may uncomment `#define TURTLEBOT` to configure the source code for **GAMRCPP** with the motions of a *Turtlebot*. Similarly, you may uncomment `#define HOR_LEN_MAX` to configure the source code for **GAMRCPP<sub>MAX</sub>** instead of **GAMRCPP**. 
