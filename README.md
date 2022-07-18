@@ -37,5 +37,5 @@ Implementation of **Scalable Online Coverage Path Planning for Multi-Robot Syste
     -   Tab 2:
         `rm ~/catkin_ws/src/GAMRCPP/output/* ; rosrun gamrcpp_pkg gamrcppMainExecutable _ws_x:=<Workspace size along the x axis> _ws_y:=<<Workspace size along the y axis> _rc:=<Robot count>`
     -   Tab 3:
-        `cp ~/<Workspace directory>/robot_ws.txt ~/catkin_ws/src/GAMRCPP/input/`
+        `cp ~/<Workspace directory>/robot_ws.txt ~/catkin_ws/src/GAMRCPP/input/`<br/> 
         `rosrun gamrcpp_pkg start_robots <Robot count>`
