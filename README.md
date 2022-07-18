@@ -18,7 +18,10 @@ Implementation of **Scalable Online Coverage Path Planning for Multi-Robot Syste
          
         *E.g.*, the given file represents a *4 x 3* grid with 2 robots - Robot-1 and Robot-2, having initial locations (0,0) and (3,2), respectively. 
     3.  msg: Contains message files. 
-    4.  output: Contains the obtained results when run with the input. The *cap_j.csv* file stores the generated paths of the robots in the *j*-th horizon. *resultPerHorizon.txt* file stores horizon-wise computation times. *fp_stat.txt* file stores the performance of algorithm, which computes feasible paths. The format of each row is as follows -<br/> 
+    4.  output: Contains the obtained results when run with the input. 
+        * *cap_j.csv* file stores the collision-free paths of the robots generated in the *j*-th horizon. 
+        * *resultPerHorizon.txt* file stores horizon-wise computation times and horizon lengths. 
+        * *fp_stat.txt* file stores the performance of algorithm, which computes feasible paths. The format of each row is as follows -<br/> 
 
-        | Horizon ID | Iteration ID of the inner while loop | Active robot count | Killed robot count | Revived robot count | Visited goal count |
+        | Horizon ID | Iteration ID of the inner WHILE loop | Active robot count | Killed robot count | Revived robot count | Visited goal count |
         | ----- | ----- | ----- | ----- | ----- | ----- |
