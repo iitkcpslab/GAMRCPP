@@ -89,28 +89,6 @@ bool GAMRCPP_MAIN::getLocalView(gamrcpp_pkg::ShareLocalInformation::Request &req
 
 	if(lv_count == rob_count)
 	{
-		//==================================================For Animation : Start==================================================
-		#ifdef DEBUG_ANIMATION
-			ofstream ofp;
-			std::string GAP_package = ros::package::getPath("gamrcpp_pkg");
-			string GV_file = GAP_package + "/anim/GlobalView_" + boost::lexical_cast<std::string>(horizon) + ".txt";//cout << endl << GV_file;
-			ofp.open(GV_file.c_str(), fstream::out);
-			//ofp << "Horizon = " << horizon << endl;
-
-			for(int j = ws_size_y - 1; j >= 0; j--)
-			{
-				for(int i = 0; i < ws_size_x; i++)
-				{
-					ofp << ws[i][j] << "\t";
-				}
-
-				ofp << endl;
-			}
-
-			ofp.close();
-		#endif
-		//==================================================For Animation : End==================================================
-
 		boost::thread* thr = new boost::thread(boost::bind(&GAMRCPP_MAIN::checkTotalRequests, this));
 		thr->detach();
 	}
@@ -261,14 +239,6 @@ void GAMRCPP_MAIN::sharePlan(plan_vec_t &totalPlan, int horizon_length)
 		srv.request.horizon_length = horizon_length;
 		gamrcpp_pkg::PlanInstance tmp_plan;
 
-		//==================================================For Animation : Start (23 Oct 2019)
-		#ifdef DEBUG_ANIMATION
-			ofstream ofp;
-			std::string GP_package = ros::package::getPath("gamrcpp_pkg");
-			string GV_file = GP_package + "/anim/Robot_" + boost::lexical_cast<std::string>(i) +".txt";
-			ofp.open(GV_file.c_str(), fstream::app);
-		#endif
-
 		for(j = 0; j < totalPlan.size(); j++)
 		{
 			if(i == totalPlan[j].id)
@@ -279,19 +249,9 @@ void GAMRCPP_MAIN::sharePlan(plan_vec_t &totalPlan, int horizon_length)
 				tmp_plan.y = totalPlan[j].location_y;
 				tmp_plan.theta = totalPlan[j].theta;
 
-				#ifdef DEBUG_ANIMATION
-					ofp << totalPlan[j].location_x << "," << totalPlan[j].location_y << "," << totalPlan[j].theta << endl;
-				#endif
-
 				srv.request.plans.push_back(tmp_plan);
 			}
 		}
-
-		#ifdef DEBUG_ANIMATION
-			ofp << "==========" << endl;
-			ofp.close();
-		#endif
-		//==================================================For Animation : End
 
 		std::string plan_service_name = "/robot_";
 		plan_service_name += boost::lexical_cast<std::string>(i);
@@ -433,7 +393,7 @@ void GAMRCPP_MAIN::generateNextPlan()
 
 int main(int argc, char **argv)
 {	
-	ros::init(argc, argv, "gap_node");
+	ros::init(argc, argv, "gamrcpp_node");
 	ros::NodeHandle nh("~");
 
 	srand(time(0));

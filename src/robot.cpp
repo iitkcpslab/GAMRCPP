@@ -27,7 +27,7 @@ Author: Ratijit Mitra
 
 #define IP_DIR_NAME "/input/"						// Input directory name
 #define ROB_WS_FILENAME "robot_ws.txt"				// Workspace with obstacles and robots
-#define CP_SERVICE_NAME "/gap_node/share_workspace"
+#define CP_SERVICE_NAME "/gamrcpp_node/share_workspace"
 #define MOTION_PRIMITIVE_EXECUTAION_TIME 1			// 2 seconds
 
 

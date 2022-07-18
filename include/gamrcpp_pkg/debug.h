@@ -17,9 +17,6 @@ Author: Ratijit Mitra
 
 #define OUTPUT_DIR "/output/"
 
-//================================================== Animation
-// #define DEBUG_ANIMATION
-
 //================================================== Result
 #define RESULT_PER_HORIZON_FILE "resultPerHorizon.txt"
 #define RESULT_FILE "result.txt"
