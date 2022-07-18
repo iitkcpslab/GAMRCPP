@@ -9,7 +9,7 @@ Implementation of **Scalable Online Coverage Path Planning for Multi-Robot Syste
 2.  Understand the directory structure:<br/> 
     1.  include: Contains the header files.<br/> 
         By default, the package is configured for **GAMRCPP** with the motions of a *Quadcopter in a 2D workspace*. However, this can be reconfigured in *debug.h* file. You may uncomment `#define TURTLEBOT` to configure the package for **GAMRCPP** with the motions of a *Turtlebot*. Similarly, you may uncomment `#define HOR_LEN_MAX` to configure the package for **GAMRCPP<sub>MAX</sub>** instead of **GAMRCPP**. 
-    2.  input: *robot_ws.txt* represents the 2D workspace grid with obstacles and initial robot locations. 
+    2.  input: *robot_ws.txt* represents the 2D workspace grid with obstacles and initial locations of the robots. 
          | Value      | Meaning                              |
          | -----      | ------------------------------------ |
          | 0.0        | Obstacle-occupied cell               |
