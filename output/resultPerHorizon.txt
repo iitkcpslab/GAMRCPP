@@ -1,0 +1,7 @@
+Horizon = 0, #O = 1, #G = 3, #C = 2, Computation Time = 0.0176359, Horizon Length = 1, #Active Robots = 2
+Horizon = 1, #O = 2, #G = 2, #C = 4, Computation Time = 0.000564498, Horizon Length = 1, #Active Robots = 2
+Horizon = 2, #O = 2, #G = 1, #C = 5, Computation Time = 0.000739738, Horizon Length = 1, #Active Robots = 1
+Horizon = 3, #O = 2, #G = 1, #C = 6, Computation Time = 0.000763787, Horizon Length = 1, #Active Robots = 1
+Horizon = 4, #O = 2, #G = 1, #C = 7, Computation Time = 0.00071014, Horizon Length = 1, #Active Robots = 1
+Horizon = 5, #O = 2, #G = 1, #C = 8, Computation Time = 0.000489968, Horizon Length = 1, #Active Robots = 1
+Horizon = 6, #O = 3, #G = 0, #C = 9, Computation Time = 0, Horizon Length = 0, #Active Robots = 0

@@ -1,0 +1,1 @@
+Workspace Size = 4 x 3, #Robots = 2, #Horizons = 7, Total Computation Time = 0.020904, Total Horizon Length = 6, Mission Time = 11.0743

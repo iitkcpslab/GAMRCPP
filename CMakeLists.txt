@@ -256,3 +256,9 @@ add_dependencies(gamrcppMainExecutable gamrcpp_pkg_gencpp)
 #add_executable(gamrcpp3dMainExecutable src/gamrcpp3d_main.cpp)		# For 3D
 #target_link_libraries(gamrcpp3dMainExecutable aux_gamrcpp_lib ${catkin_LIBRARIES})
 #add_dependencies(gamrcpp3dMainExecutable gamrcpp_pkg_gencpp)
+
+add_executable(robotExecutable src/robot.cpp)
+target_link_libraries(robotExecutable ${catkin_LIBRARIES})
+add_dependencies(robotExecutable gamrcpp_pkg_gencpp)
+
+add_executable(start_robots src/start_robots.cpp)

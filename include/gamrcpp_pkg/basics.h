@@ -80,7 +80,7 @@ typedef std::vector<robot_status> robot_status_vec_t;
 typedef std::vector<int> Cluster;
 
 //std::vector< std::vector<double> > rd;
-typedef vector<vector<double> > Rewards;
+// typedef vector<vector<double> > Rewards;
 bool isObstacle (pos_vec_t , unsigned int , unsigned int );
 
 struct loc
@@ -98,12 +98,12 @@ struct node     //For stacks and queues
   int is_robot;
 };
 
-
+typedef vector<double> double_vec;
 typedef vector<struct loc> vec_loc;
 
-
-typedef vector<vector<int> > vec_vec_int;
 typedef vector<vector<bool> > vec_vec_bool;
+typedef vector<double_vec> double_mat;
+typedef vector<vector<int> > vec_vec_int;
 typedef vector<vector<struct loc> > vec_vec_loc;
 
 typedef vector<vec_vec_int> vec_3d_int;
