@@ -42,26 +42,10 @@ Implementation of **Scalable Online Coverage Path Planning for Multi-Robot Syste
         `source ~/catkin_ws/devel/setup.bash`<br/> 
         `rosrun gamrcpp_pkg start_robots <Robot count>`
 
-
-
-import { StyleSheet } from 'react-native';
-
-const styles = StyleSheet.create({
-    player : {
-        position        : 'absolute',
-        height          : '50%',
-        width           : '50%'
-    }
-});
-<View style={styles.player}>
-  <VideoPlayer />
-</View>
-
-
 ##### Gazebo simulation videos with quadcopters using PX4
-* In 2D workspaces -
+*   In 2D workspaces -
 
-https://user-images.githubusercontent.com/17489756/181875418-7d6f449d-bd06-4b48-8321-0521ec531a89.mp4
+    https://user-images.githubusercontent.com/17489756/181875418-7d6f449d-bd06-4b48-8321-0521ec531a89.mp4
 
 https://user-images.githubusercontent.com/17489756/181875451-d613dc90-03b5-4e05-b1c5-5a790d403a5a.mp4
 
