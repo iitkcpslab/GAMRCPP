@@ -55,6 +55,6 @@ https://user-images.githubusercontent.com/17489756/181875617-02f9eb41-d5e0-4f2c-
 
 https://user-images.githubusercontent.com/17489756/181875620-ef5362e4-7c2c-41bf-853a-122709114350.mp4
 
-* In 3D workspaces -
+* In 3D workspace -
 
 https://user-images.githubusercontent.com/17489756/181875811-8d1fc5cb-4623-4117-93f5-34f89d61f9e1.mp4
