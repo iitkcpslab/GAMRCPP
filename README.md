@@ -62,4 +62,4 @@ Implementation of **Scalable Online Coverage Path Planning for Multi-Robot Syste
     video_stream = VideoStream.from_url(https://user-images.githubusercontent.com/17489756/181875811-8d1fc5cb-4623-4117-93f5-34f89d61f9e1.mp4)
     video_stream.video.width = 50
     video_stream.video.height = 50
-    video_stream.video
+    video_stream
