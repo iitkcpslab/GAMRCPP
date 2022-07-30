@@ -47,14 +47,14 @@ Implementation of **Scalable Online Coverage Path Planning for Multi-Robot Syste
 
     https://user-images.githubusercontent.com/17489756/181875418-7d6f449d-bd06-4b48-8321-0521ec531a89.mp4
 
-https://user-images.githubusercontent.com/17489756/181875451-d613dc90-03b5-4e05-b1c5-5a790d403a5a.mp4
+    https://user-images.githubusercontent.com/17489756/181875451-d613dc90-03b5-4e05-b1c5-5a790d403a5a.mp4
 
-https://user-images.githubusercontent.com/17489756/181875595-c9b6b367-5d6a-4e79-bd45-810cdf6dcf3e.mp4
+    https://user-images.githubusercontent.com/17489756/181875595-c9b6b367-5d6a-4e79-bd45-810cdf6dcf3e.mp4
 
-https://user-images.githubusercontent.com/17489756/181875617-02f9eb41-d5e0-4f2c-af8f-d373546cc3d3.mp4
+    https://user-images.githubusercontent.com/17489756/181875617-02f9eb41-d5e0-4f2c-af8f-d373546cc3d3.mp4
 
-https://user-images.githubusercontent.com/17489756/181875620-ef5362e4-7c2c-41bf-853a-122709114350.mp4
+    https://user-images.githubusercontent.com/17489756/181875620-ef5362e4-7c2c-41bf-853a-122709114350.mp4
 
-* In 3D workspace -
+*   In 3D workspace -
 
-https://user-images.githubusercontent.com/17489756/181875811-8d1fc5cb-4623-4117-93f5-34f89d61f9e1.mp4
+    https://user-images.githubusercontent.com/17489756/181875811-8d1fc5cb-4623-4117-93f5-34f89d61f9e1.mp4
