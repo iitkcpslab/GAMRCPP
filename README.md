@@ -42,7 +42,7 @@ Implementation of **Scalable Online Coverage Path Planning for Multi-Robot Syste
         `source ~/catkin_ws/devel/setup.bash`<br/> 
         `rosrun gamrcpp_pkg start_robots <Robot count>`
 
-##### Gazebo simulation videos with quadcopters using PX4
+<!--##### Gazebo simulation videos with quadcopters using PX4
 *   In 2D workspaces -
 
     https://user-images.githubusercontent.com/17489756/181875418-7d6f449d-bd06-4b48-8321-0521ec531a89.mp4
@@ -57,4 +57,4 @@ Implementation of **Scalable Online Coverage Path Planning for Multi-Robot Syste
 
 *   In 3D workspace -
 
-    https://user-images.githubusercontent.com/17489756/181875811-8d1fc5cb-4623-4117-93f5-34f89d61f9e1.mp4
+    https://user-images.githubusercontent.com/17489756/181875811-8d1fc5cb-4623-4117-93f5-34f89d61f9e1.mp4-->
