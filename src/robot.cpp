@@ -16,13 +16,17 @@ Author: Ratijit Mitra
 #include <iostream>
 #include <fstream>
 #include <string.h>
+#include <map>
 
 #include <boost/lexical_cast.hpp>
 
 #include "gamrcpp_pkg/basics.h"
 #include "gamrcpp_pkg/debug.h"
+
 #include "gamrcpp_pkg/PlanForHorizon.h"
 #include "gamrcpp_pkg/ShareLocalInformation.h"
+
+#include "gamrcpp_pkg/CellInfo.h"
 
 
 #define IP_DIR_NAME "/input/"						// Input directory name
@@ -48,6 +52,7 @@ class RobotClass
 		float posY;
 		float posTheta;
 		double_mat lv;					// Local view of the workspace
+		map<pair<uint, uint>, float> cell_info_map;
 		plan_vec_t path;				// Path
 
 
@@ -56,6 +61,8 @@ class RobotClass
 		{
 			this->nh = nh;
 			this->nh->getParam("rid", rob_id);
+
+			cell_info_map.clear();
 
 			string path_service_name = "robot_" + to_string(rob_id) + "/share_plan";
 			path_ss = nh->advertiseService(path_service_name, &RobotClass::getPath, this);
@@ -93,11 +100,9 @@ class RobotClass
 							posTheta = 1;		// 0, rob_id % 4, rand() % 4		//0 = E, 1 = N, 2 = W, 3 = S
 		        		}
 			        	
-			        	// ws_lidar[row][col] = 0.5;
 			        	ws_lidar_val.push_back(0.5);
 		        	}
 		        	else
-		        		// ws_lidar[row][col] = d;
 			        	ws_lidar_val.push_back(d);
 		        	
 		        	token = strtok(NULL, ",");
@@ -114,16 +119,6 @@ class RobotClass
 		    ws_size_x = row - 1;
 		    ifs.close();
 
-		    // for(int j = ws_size_y - 1; j >= 0; j--)
-		    // {
-		    // 	for(int i = 0; i < ws_size_x; i++)
-		    // 	{
-		    // 		printf("%.1lf\t", ws_lidar[i][j]);
-		    // 	}
-
-		    // 	printf("\n");
-		    // }
-
 		    printf("\nR_%d Initial State = (%d, %d, %d)\n==========\n", rob_id, (int)posX, (int)posY, (int)posTheta);
 
 		    for(uint i = 0; i < ws_size_x; i++)		// Initialize: -1 = Unexplored
@@ -131,7 +126,6 @@ class RobotClass
 		    	double_vec lv_val;
 
 				for(uint j = 0; j < ws_size_y; j++)
-					// lv[i][j] = -1;
 					lv_val.push_back(-1);
 
 				lv.push_back(lv_val);
@@ -140,173 +134,49 @@ class RobotClass
 		
 		
 		//====================================================================================================
+		void readLiDAR(int nbr_x, int nbr_y)
+		{
+			if((0 <= nbr_x) && (nbr_x < ws_size_x) && (0 <= nbr_y) && (nbr_y < ws_size_y))		// Valid
+				if(lv[nbr_x][nbr_y] == -1)		// Only update unexplored cells
+				{
+					double lidar_val = ws_lidar[nbr_x][nbr_y];
+					lv[nbr_x][nbr_y] = lidar_val;
+
+					pair<uint, uint> cell_loc_key(nbr_x, nbr_y);
+
+					if(cell_info_map.find(cell_loc_key) == cell_info_map.end())
+					{
+						pair<pair<uint, uint>, float> cell_info(cell_loc_key, lidar_val);
+						cell_info_map.insert(cell_info);
+					}
+				}
+		}
+		
+		
+		//====================================================================================================
 		void updateLocalView()
 		{
-			int current_x = (int)posX;
-	        int current_y = (int)posY;
-	        int current_theta = (int)posTheta;
-			printf("R_%d (%d, %d, %d)\n", rob_id, current_x, current_y, current_theta);
+			int cur_x = int(posX);
+	        int cur_y = int(posY);
 
-			int neighbourX, neighbourY;
+	        readLiDAR(cur_x + 1, cur_y);		// East cell
+	        readLiDAR(cur_x, cur_y + 1);		// North cell
+	        readLiDAR(cur_x - 1, cur_y);		// West cell
+	        readLiDAR(cur_x, cur_y - 1);		// South cell
 
-			switch(current_theta)		// 0: East, 1: North, 2: West, 3: South
+			lv[cur_x][cur_y] = 1;			// Robot's current cell is covered
+
+			pair<uint, uint> cell_loc_key(cur_x, cur_y);
+
+			if(cell_info_map.find(cell_loc_key) == cell_info_map.end())
 			{
-				case 0:	neighbourX = current_x + 1;		// Forward cell
-						neighbourY = current_y;
-
-						if((0 <= neighbourX && neighbourX < ws_size_x) && (0 <= neighbourY && neighbourY < ws_size_y))		// Valid neighbour
-							if(lv[neighbourX][neighbourY] == -1)		// Only update unexplored cells
-								lv[neighbourX][neighbourY] = ws_lidar[neighbourX][neighbourY];
-
-						neighbourX = current_x;		// Left cell
-						neighbourY = current_y + 1;
-
-						if((0 <= neighbourX && neighbourX < ws_size_x) && (0 <= neighbourY && neighbourY < ws_size_y))
-							if(lv[neighbourX][neighbourY] == -1)
-								lv[neighbourX][neighbourY] = ws_lidar[neighbourX][neighbourY];
-
-						neighbourX = current_x;		// Right cell
-						neighbourY = current_y - 1;
-
-						if((0 <= neighbourX && neighbourX < ws_size_x) && (0 <= neighbourY && neighbourY < ws_size_y))
-							if(lv[neighbourX][neighbourY] == -1)
-								lv[neighbourX][neighbourY] = ws_lidar[neighbourX][neighbourY];
-
-						neighbourX = current_x - 1;		// Backward cell
-						neighbourY = current_y;
-
-						if((0 <= neighbourX && neighbourX < ws_size_x) && (0 <= neighbourY && neighbourY < ws_size_y))
-							if(lv[neighbourX][neighbourY] == -1)
-								lv[neighbourX][neighbourY] = ws_lidar[neighbourX][neighbourY];
-					break;
-				case 1:	neighbourX = current_x;		// Forward cell
-						neighbourY = current_y + 1;
-
-						if((0 <= neighbourX && neighbourX < ws_size_x) && (0 <= neighbourY && neighbourY < ws_size_y))
-							if(lv[neighbourX][neighbourY] == -1)
-								lv[neighbourX][neighbourY] = ws_lidar[neighbourX][neighbourY];
-
-						neighbourX = current_x - 1;		// Left cell
-						neighbourY = current_y;
-
-						if((0 <= neighbourX && neighbourX < ws_size_x) && (0 <= neighbourY && neighbourY < ws_size_y))
-							if(lv[neighbourX][neighbourY] == -1)
-								lv[neighbourX][neighbourY] = ws_lidar[neighbourX][neighbourY];
-
-						neighbourX = current_x + 1;		// Right cell
-						neighbourY = current_y;
-
-						if((0 <= neighbourX && neighbourX < ws_size_x) && (0 <= neighbourY && neighbourY < ws_size_y))
-							if(lv[neighbourX][neighbourY] == -1)
-								lv[neighbourX][neighbourY] = ws_lidar[neighbourX][neighbourY];
-
-						neighbourX = current_x;		// Backward cell
-						neighbourY = current_y - 1;
-
-						if((0 <= neighbourX && neighbourX < ws_size_x) && (0 <= neighbourY && neighbourY < ws_size_y))
-							if(lv[neighbourX][neighbourY] == -1)
-								lv[neighbourX][neighbourY] = ws_lidar[neighbourX][neighbourY];
-					break;
-				case 2:	neighbourX = current_x - 1;		// Forward cell
-						neighbourY = current_y;
-
-						if((0 <= neighbourX && neighbourX < ws_size_x) && (0 <= neighbourY && neighbourY < ws_size_y))
-							if(lv[neighbourX][neighbourY] == -1)
-								lv[neighbourX][neighbourY] = ws_lidar[neighbourX][neighbourY];
-
-						neighbourX = current_x;		// Left cell
-						neighbourY = current_y - 1;
-
-						if((0 <= neighbourX && neighbourX < ws_size_x) && (0 <= neighbourY && neighbourY < ws_size_y))
-							if(lv[neighbourX][neighbourY] == -1)
-								lv[neighbourX][neighbourY] = ws_lidar[neighbourX][neighbourY];
-
-						neighbourX = current_x;		// Right cell
-						neighbourY = current_y + 1;
-
-						if((0 <= neighbourX && neighbourX < ws_size_x) && (0 <= neighbourY && neighbourY < ws_size_y))
-							if(lv[neighbourX][neighbourY] == -1)
-								lv[neighbourX][neighbourY] = ws_lidar[neighbourX][neighbourY];
-
-						neighbourX = current_x + 1;		// Backward cell
-						neighbourY = current_y;
-
-						if((0 <= neighbourX && neighbourX < ws_size_x) && (0 <= neighbourY && neighbourY < ws_size_y))
-							if(lv[neighbourX][neighbourY] == -1)
-								lv[neighbourX][neighbourY] = ws_lidar[neighbourX][neighbourY];
-					break;
-				case 3:	neighbourX = current_x;		// Forward cell
-						neighbourY = current_y - 1;
-
-						if((0 <= neighbourX && neighbourX < ws_size_x) && (0 <= neighbourY && neighbourY < ws_size_y))
-							if(lv[neighbourX][neighbourY] == -1)
-								lv[neighbourX][neighbourY] = ws_lidar[neighbourX][neighbourY];
-
-						neighbourX = current_x + 1;		// Left cell
-						neighbourY = current_y;
-
-						if((0 <= neighbourX && neighbourX < ws_size_x) && (0 <= neighbourY && neighbourY < ws_size_y))
-							if(lv[neighbourX][neighbourY] == -1)
-								lv[neighbourX][neighbourY] = ws_lidar[neighbourX][neighbourY];
-
-						neighbourX = current_x - 1;		// Right cell
-						neighbourY = current_y;
-
-						if((0 <= neighbourX && neighbourX < ws_size_x) && (0 <= neighbourY && neighbourY < ws_size_y))
-							if(lv[neighbourX][neighbourY] == -1)
-								lv[neighbourX][neighbourY] = ws_lidar[neighbourX][neighbourY];
-
-						neighbourX = current_x;		// Backward cell
-						neighbourY = current_y + 1;
-
-						if((0 <= neighbourX && neighbourX < ws_size_x) && (0 <= neighbourY && neighbourY < ws_size_y))
-							if(lv[neighbourX][neighbourY] == -1)
-								lv[neighbourX][neighbourY] = ws_lidar[neighbourX][neighbourY];
-					break;
+				pair<pair<uint, uint>, float> cell_info(cell_loc_key, 1);
+				cell_info_map.insert(cell_info);
 			}
+			else
+				cell_info_map.at(cell_loc_key) = 1;
 
-			lv[current_x][current_y] = 1.0;			// Robot's current cell is covered
-		}
-
-
-		void updateLocalView_longitudinal()
-		{
-			int current_x = (int)posX;
-	        int current_y = (int)posY;
-	        int current_theta = (int)posTheta;
-			printf("Robot_%d (%d, %d, %d)\n", rob_id, current_x, current_y, current_theta);
-
-			int neighbourX, neighbourY;
-
-			neighbourX = current_x + 1;		// Right cell
-			neighbourY = current_y;
-
-			if((0 <= neighbourX && neighbourX < ws_size_x) && (0 <= neighbourY && neighbourY < ws_size_y))
-				if(lv[neighbourX][neighbourY] == -1)		// Only update unexplored cells
-					lv[neighbourX][neighbourY] = ws_lidar[neighbourX][neighbourY];
-
-			neighbourX = current_x;		// Top cell
-			neighbourY = current_y + 1;
-
-			if((0 <= neighbourX && neighbourX < ws_size_x) && (0 <= neighbourY && neighbourY < ws_size_y))
-				if(lv[neighbourX][neighbourY] == -1)
-					lv[neighbourX][neighbourY] = ws_lidar[neighbourX][neighbourY];
-
-			neighbourX = current_x - 1;		// Left cell
-			neighbourY = current_y;
-
-			if((0 <= neighbourX && neighbourX < ws_size_x) && (0 <= neighbourY && neighbourY < ws_size_y))
-				if(lv[neighbourX][neighbourY] == -1)
-					lv[neighbourX][neighbourY] = ws_lidar[neighbourX][neighbourY];
-
-			neighbourX = current_x;		// Bottom cell
-			neighbourY = current_y - 1;
-
-			if((0 <= neighbourX && neighbourX < ws_size_x) && (0 <= neighbourY && neighbourY < ws_size_y))
-				if(lv[neighbourX][neighbourY] == -1)
-					lv[neighbourX][neighbourY] = ws_lidar[neighbourX][neighbourY];
-
-			lv[current_x][current_y] = 1.0;			// Robot's current cell is covered
+			// printLocalView();
 		}
 		
 		
@@ -341,15 +211,23 @@ class RobotClass
 			lv_srv.request.x = posX;
 	    	lv_srv.request.y = posY;
 			lv_srv.request.theta = posTheta;
+
+    		gamrcpp_pkg::CellInfo cell_info_tmp;
+			map<pair<uint, uint>, float>::iterator cell_info_map_it;
 			
-			for(uint i = 0; i < ws_size_x; i++)
-				for(uint j = 0; j < ws_size_y; j++)
-					lv_srv.request.workspace.push_back(lv[i][j]);
+			for(cell_info_map_it = cell_info_map.begin(); cell_info_map_it != cell_info_map.end(); ++cell_info_map_it)
+			{
+				// cout << endl << (cell_info_map_it->first).first << "," << (cell_info_map_it->first).second << ": " << cell_info_map_it->second;
+				cell_info_tmp.cell_x = uint((cell_info_map_it->first).first);
+				cell_info_tmp.cell_y = uint((cell_info_map_it->first).second);
+				cell_info_tmp.cell_type = float(cell_info_map_it->second);
+				lv_srv.request.lv_short.push_back(cell_info_tmp);
+			}
 			
 			if(localview_sc.call(lv_srv))
-				printf("R_%d (Horizon = %d) sendLocalView().\n", rob_id, (int)lv_srv.response.next_horizon);
+				cout << "\nR_" << rob_id << " sendLocalView(" << hor_id << ").";
 			else
-				printf("R_%d (Horizon = %d) sendLocalView()!\n", rob_id, hor_id);
+				cout << "\nR_" << rob_id << " sendLocalView(" << hor_id << ")!";
 		}
 		
 
@@ -369,6 +247,8 @@ class RobotClass
 				tmp_plan.theta = req.plans[i].theta;
 				path.push_back(tmp_plan);
 			}
+
+			cell_info_map.clear();
 
 			#ifdef TURTLEBOT
 				followPath();
@@ -483,7 +363,7 @@ class RobotClass
 					posY = posY_next;
 					posTheta = posTheta_next;
 
-					updateLocalView_longitudinal();
+					updateLocalView();
 					//printWorkspace();
 					primitive_end = Time::now();
 					fflush(stdout);
@@ -505,7 +385,6 @@ class RobotClass
 		void updateHorizon()
 		{
 			hor_id++;
-			printf("Next Horizon = %d\n==================================================\n", hor_id);
 		}
 };
 
@@ -519,13 +398,7 @@ int main(int argc, char *argv[])
 	RobotClass *robot_obj = new RobotClass();
 	robot_obj->initializeRobot(&nh);
 	robot_obj->populateLidarValues();
-
-	#ifdef TURTLEBOT
-		robot_obj->updateLocalView();
-	#else
-		robot_obj->updateLocalView_longitudinal();
-	#endif
-	
+	robot_obj->updateLocalView();	
 	//robot_obj->printWorkspace();
 	robot_obj->sendLocalView();
 

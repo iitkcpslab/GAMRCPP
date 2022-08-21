@@ -4,5 +4,6 @@ float32 x
 float32 y
 float32 theta
 float32[] workspace
+CellInfo[] lv_short
 ---
 int16 next_horizon

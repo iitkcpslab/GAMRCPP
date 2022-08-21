@@ -128,22 +128,21 @@ void GAMRCPP_MAIN::printWorkspace()
 
 void GAMRCPP_MAIN::updateGlobalView(gamrcpp_pkg::ShareLocalInformation::Request &req)
 {
-	for(uint i = 0; i < ws_size_x; i++)
-		for(uint j = 0; j < ws_size_y; j++)
-		{
-			uint lv_index = i * ws_size_y + j;		// Local view index
-			double lv = double(req.workspace[lv_index]);		// Local view
+	size_t lv_short_size = req.lv_short.size();
 
-			if(lv == -1.0)		// Unexplored
-				continue;
-			else if((lv == 0.0) || (lv == 0.5))		// Obstacle or Goal
-			{
-				if(ws[i][j] == -1.0)
-					ws[i][j] = lv;
-			}
-			else		// Covered
-				ws[i][j] = lv;
+	for(size_t lv_index = 0; lv_index < lv_short_size; lv_index++)
+	{
+		gamrcpp_pkg::CellInfo cell_info_tmp = req.lv_short[lv_index];
+		double lv = double(cell_info_tmp.cell_type);		// Local view
+
+		if((lv == 0) || (lv == 0.5))		// Obstacle or Goal
+		{
+			if(ws[cell_info_tmp.cell_x][cell_info_tmp.cell_y] == -1)
+				ws[cell_info_tmp.cell_x][cell_info_tmp.cell_y] = lv;
 		}
+		else		// Covered
+			ws[cell_info_tmp.cell_x][cell_info_tmp.cell_y] = lv;
+	}
 }
 
 
@@ -259,8 +258,13 @@ void GAMRCPP_MAIN::sharePlan(plan_vec_t &totalPlan, int horizon_length)
 		plan_service_name += "/share_plan";
 		ros::ServiceClient global_plan = nh->serviceClient<gamrcpp_pkg::PlanForHorizon>(plan_service_name);
 		
-		boost::thread* thread1 = new boost::thread(boost::bind(&GAMRCPP_MAIN::callRobot, this, global_plan, srv, plan_service_name));			//Shares plans asynchronously - 1
-		thread1->detach();
+		if(horizon_length == -1)
+			callRobot(global_plan, srv, plan_service_name);
+		else
+		{
+			boost::thread* thread1 = new boost::thread(boost::bind(&GAMRCPP_MAIN::callRobot, this, global_plan, srv, plan_service_name));			//Shares plans asynchronously - 1
+			thread1->detach();
+		}
 	}
 }
 

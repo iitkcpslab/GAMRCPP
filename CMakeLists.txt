@@ -87,6 +87,7 @@ endif(MSVC)
 add_message_files(
 	FILES
 	PlanInstance.msg
+	CellInfo.msg
 )
 
 ## Generate services in the 'srv' folder
